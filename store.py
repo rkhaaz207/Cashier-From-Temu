@@ -18,16 +18,16 @@ class QueueSystem:
     def panggil(self):
         return self.data.dequeue()
         
-    def draw(self, screen, font, title_font):
-        screen.blit(title_font.render("ANTREAN KASIR", True, QUEUE_COLOR), (20, 140))
+    def draw(self, screen, font, title_font, x, y, title, title_color, text_color):
+        screen.blit(title_font.render(title, True, title_color), (x, y))
         items = self.data.get_all()
         if not items:
-            screen.blit(font.render("- Kosong -", True, TEXT_COLOR), (20, 180))
+            screen.blit(font.render("Kosong", True, text_color), (x + 20, y + 40))
         else:
             for i, orang in enumerate(items):
-                screen.blit(font.render(f"[{orang}]", True, TEXT_COLOR), (20 + (i * 150), 180))
+                screen.blit(font.render(f"[{orang}]", True, text_color), (x + 20 + (i * 150), y + 40))
                 if i < len(items) - 1:
-                    screen.blit(font.render("<-", True, QUEUE_COLOR), (20 + (i * 150) + 125, 180))
+                    screen.blit(font.render("<-", True, title_color), (x + 20 + (i * 150) + 125, y + 40))
 
 class CashierSystem:
     def __init__(self):
@@ -35,7 +35,7 @@ class CashierSystem:
         self.no = 1
         
     def reset(self):
-        self.data = DynamicStack() 
+        self.data = DynamicStack()
         self.no = 1
         
     def scan(self):
@@ -46,18 +46,17 @@ class CashierSystem:
     def batal(self):
         return self.data.pop()
         
-    def draw(self, screen, font, title_font):
-        screen.blit(title_font.render("KERANJANG", True, STACK_COLOR), (20, 260))
+    def draw(self, screen, font, title_font, x, y, title, title_color, text_color):
+        screen.blit(title_font.render(title, True, title_color), (x, y))
         items = self.data.get_all()
         if not items:
-            screen.blit(font.render("- Kosong -", True, TEXT_COLOR), (20, 300))
+            screen.blit(font.render("Kosong", True, text_color), (x + 20, y + 40))
         else:
             for i, barang in enumerate(items):
-                pos_y = 300 + (i * 25)
+                pos_y = y + 40 + (i * 25)
                 if i == 0:
-                    screen.blit(font.render("<- TOP", True, STACK_COLOR), (200, pos_y))
-                screen.blit(font.render(f"| {barang.ljust(15)} |", True, TEXT_COLOR), (20, pos_y))
-            screen.blit(font.render("-------------------", True, TEXT_COLOR), (20, 300 + (len(items) * 25)))
+                    screen.blit(font.render("<- TOP", True, title_color), (x + 180, pos_y))
+                screen.blit(font.render(f"| {barang.ljust(15)} |", True, text_color), (x + 20, pos_y))
 
 class StockSystem:
     def __init__(self):
@@ -72,15 +71,14 @@ class StockSystem:
     def ambil(self):
         return self.data.pop()
         
-    def draw(self, screen, font, title_font):
-        screen.blit(title_font.render("STOK GUDANG", True, WAREHOUSE_COLOR), (500, 260))
+    def draw(self, screen, font, title_font, x, y, title, title_color, text_color):
+        screen.blit(title_font.render(title, True, title_color), (x, y))
         items = self.data.get_all()
         if not items:
-            screen.blit(font.render("- Kosong -", True, TEXT_COLOR), (500, 300))
+            screen.blit(font.render("Kosong", True, text_color), (x + 20, y + 40))
         else:
             for i, barang in enumerate(items):
-                pos_y = 300 + (i * 25)
+                pos_y = y + 40 + (i * 25)
                 if i == 0:
-                    screen.blit(font.render("<- TOP", True, WAREHOUSE_COLOR), (700, pos_y))
-                screen.blit(font.render(f"| {barang.ljust(17)} |", True, TEXT_COLOR), (500, pos_y))
-            screen.blit(font.render("---------------------", True, TEXT_COLOR), (500, 300 + (len(items) * 25)))
+                    screen.blit(font.render("<- TOP", True, title_color), (x + 200, pos_y))
+                screen.blit(font.render(f"| {barang.ljust(17)} |", True, text_color), (x + 20, pos_y))
