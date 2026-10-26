@@ -1,4 +1,5 @@
 import pygame
+import random
 from dynamic import DynamicQueue, DynamicStack
 import pics
 
@@ -8,12 +9,25 @@ class QueueSystem:
         self.no = 1
         
     def tambah(self):
-        self.data.enqueue(f"P-{self.no}")
+        # Pilih angka acak 0 atau 1 untuk menentukan gambar
+        idx_gambar = random.choice([0, 1])
+        
+        # Simpan sebagai dictionary, bukan lagi string biasa
+        data_pelanggan = {
+            "nama": f"P-{self.no}", 
+            "img_idx": idx_gambar
+        }
+        
+        self.data.enqueue(data_pelanggan)
         self.no += 1
         return f"Pelanggan {self.no - 1} masuk antrean."
         
     def panggil(self):
-        return self.data.dequeue()
+        pelanggan = self.data.dequeue()
+        if pelanggan:
+            # Kembalikan hanya namanya (string) agar main.py tidak error saat mencetak teks
+            return pelanggan["nama"]
+        return None
         
     def draw(self, screen, font, title_font, x, y, title, title_color, text_color):
         screen.blit(title_font.render(title, True, title_color), (x, y))
@@ -21,13 +35,18 @@ class QueueSystem:
         if not items:
             screen.blit(font.render("Kosong", True, text_color), (x + 20, y + 40))
         else:
-            img_pelanggan = pics.get_img_pelanggan()
-            for i, orang in enumerate(items):
+            # Ambil list gambar dari assets
+            img_list = pics.get_img_pelanggan_list()
+            
+            for i, pelanggan in enumerate(items):
                 pos_x = x + 20 + (i * 90)
                 pos_y = y + 40
                 
-                screen.blit(img_pelanggan, (pos_x, pos_y))
-                screen.blit(font.render(orang, True, text_color), (pos_x, pos_y + 45))
+                nama_teks = pelanggan["nama"]
+                img_dipilih = img_list[pelanggan["img_idx"]]
+                
+                screen.blit(img_dipilih, (pos_x, pos_y))
+                screen.blit(font.render(nama_teks, True, text_color), (pos_x, pos_y + 45))
                 
                 if i < len(items) - 1:
                     screen.blit(font.render("<-", True, title_color), (pos_x + 60, pos_y + 10))
