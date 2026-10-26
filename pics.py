@@ -32,7 +32,7 @@ def get_img_box():
     global _img_box
     if _img_box is None:
         try:
-            path_gambar = os.path.join(BASE_DIR, "assets", "13-139411_box-png-free-download-cardboard-box-png-transparent.png")
+            path_gambar = os.path.join(BASE_DIR, "assets", "box.png")
             img = pygame.image.load(path_gambar)
             _img_box = pygame.transform.scale(img, (30, 30))
         except FileNotFoundError:
